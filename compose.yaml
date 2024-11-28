@@ -1,0 +1,54 @@
+services:
+
+  app:
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile
+    networks:
+      - dev_net
+    volumes:
+     - .\app:/app
+
+
+  valkey:
+    build:
+      context: ./valkey
+      dockerfile: ./Dockerfile
+    networks:
+      - dev_net
+    volumes:
+      - .\valkey\data:/data/
+
+  # valkey-vanilla:
+  #   image: valkey/valkey:8.0.1-alpine
+  #   restart: unless-stopped
+  #   networks:
+  #     - dev_net
+  #   volumes:
+  #     - .\valkey\data:/data/      
+
+  dbgate:
+    image: dbgate/dbgate
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - "3000:3000"
+    volumes:
+      - dbgate-data:/root/.dbgate
+    environment:
+      BASIC_AUTH: true
+      LOGINS: admin
+      LOGIN_PASSWORD_admin: admin
+      CONNECTIONS: con1
+      LABEL_con1: MongoDB
+      URL_con1: mongodb://root:example@mongo:27017/
+      ENGINE_con1: mongo@dbgate-plugin-mongo
+
+networks:
+  dev_net:
+    driver: bridge
+
+volumes:
+  dbgate-data:
+    external: true
