@@ -85,6 +85,22 @@ test=# exit
 PS1>
 ```
 
+## DbGate
+
+WebUI for managing the databases.
+
+Like the databases, User `admin`, with Password `admin`
+
+* [DbGate is cross-platform SQL+noSQL database client](https://dbgate.org/docs/index.html)
+* [Use storage database and administration for settings (Premium)](https://dbgate.org/docs/web-app-config.html)
+
+```console
+PS1> docker compose up -d dbgate
+
+# Open from Docker-Desktop or
+PS1> start "http://localhost:3000"
+```
+
 ## Python
 
 * [Docker Interactive Mode in Python 3 Programming](https://dnmtechs.com/using-docker-interactive-mode-in-python-3-programming/)
