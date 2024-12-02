@@ -115,7 +115,16 @@ PS1> docker compose up -d dbgate
 PS1> start "http://localhost:3000"
 ```
 
-## Python
+## Alpine
 
+A fledgling attempt to provide an interactive Docker development container.
+There are two major issues
+
+* Different `VirtualEnv` are required for `Windows` and `Linux`.
+* `Linux` needs to `non-root` account for `VirtualEnv`
+
+* [Alpine Linux - Setting up a new user](https://wiki.alpinelinux.org/wiki/Setting_up_a_new_user)
+* [How to use adduser command with a bash script](https://unix.stackexchange.com/questions/120946/how-to-use-adduser-command-with-a-bash-script)
 * [Docker Interactive Mode in Python 3 Programming](https://dnmtechs.com/using-docker-interactive-mode-in-python-3-programming/)
 * [Installing Python in Alpine Linux](https://www.askpython.com/python/examples/python-alpine-linux)
+
