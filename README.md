@@ -54,6 +54,20 @@ string
 (integer) 42
 127.0.0.1:6379> exit
 
+# Checking for protected mode
+PS1> docker exec -it valkey valkey-cli
+127.0.0.1:6379> config get *protect*
+1) "protected-mode"
+2) "no"
+3) "enable-protected-configs"
+4) "no"
+127.0.0.1:6379> config get *bind*
+1) "bind"
+2) "* -::*"
+3) "bind-source-addr"
+4) ""
+127.0.0.1:6379> exit
+
 PS1> docker compose down valkey
 ```
 
