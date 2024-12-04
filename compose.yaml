@@ -30,6 +30,19 @@ services:
   #   volumes:
   #     - .\valkey\data:/data
 
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    volumes:
+      - .\mariadb\data:/var/lib/mysql
+
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -60,13 +73,24 @@ services:
       BASIC_AUTH: true
       LOGINS: admin
       LOGIN_PASSWORD_admin: admin
-      CONNECTIONS: postgres
-      LABEL_postgres: Postgres
-      SERVER_postgres: postgres
-      PORT_postgres: 5432
-      USER_postgres: admin
-      PASSWORD_postgres: admin
-      ENGINE_postgres: postgres@dbgate-plugin-postgres
+      CONNECTIONS: mysql, mongo # postgres
+      LABEL_mysql: MariaDB
+      SERVER_mysql: localhost
+      USER_mysql: root
+      PASSWORD_mysql: example
+      PORT_mysql: 3306
+      ENGINE_mysql: mysql@dbgate-plugin-mysql
+
+#      LABEL_con1: MongoDB
+#      URL_mongo: mongodb://root:example@mongo:27017/
+#      ENGINE_mongo: mongo@dbgate-plugin-mongo
+
+#      LABEL_postgres: Postgres
+#      SERVER_postgres: postgres
+#      PORT_postgres: 5432
+#      USER_postgres: admin
+#      PASSWORD_postgres: admin
+#      ENGINE_postgres: postgres@dbgate-plugin-postgres
 
 networks:
   dev_net:

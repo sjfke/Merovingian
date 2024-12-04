@@ -70,10 +70,116 @@ PS1> docker exec -it valkey valkey-cli
 
 PS1> docker compose down valkey
 ```
+## MariaDB
+
+The MariaDB `root` password is `example`, set in the `compose.yaml` file.
+
+```console
+PS1> docker exec -it mariadb bash
+# mariadb -u root -p
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.013 sec)
+MariaDB [mysql]> use mysql;
+MariaDB [mysql]> select host,user,password_expired from user limit 6;
++-----------+-------------+------------------+
+| Host      | User        | password_expired |
++-----------+-------------+------------------+
+| localhost | mariadb.sys | Y                |
+| localhost | root        | N                |
+| %         | root        | N                |
+| 127.0.0.1 | healthcheck | N                |
+| ::1       | healthcheck | N                |
+| localhost | healthcheck | N                |
++-----------+-------------+------------------+
+6 rows in set (0.001 sec)
+MariaDB [mysql]> exit;
+root@3f69733aef31:/# exit
+```
+
+**NOTE:** `mariadb` and `mysql` are synonymous.
+
+* [How to Create User With Grant Privileges in MariaDB](https://www.geeksforgeeks.org/how-to-create-user-with-grant-privileges-in-mariadb/)
+* [MySQL Cheatsheet](https://nonbleedingedge.com/cheatsheets/mysql.html)
+
+Example of how to create a `user`, set hos password and `grant` access to the database `test`.
+
+```console
+PS1> docker exec -it mariadb bash
+root@3f69733aef31:/# mariadb -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 4
+Server version: 11.6.2-MariaDB-ubu2404 mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]>
+MariaDB [(none)]>
+MariaDB [(none)]> create database test;
+Query OK, 1 row affected (0.007 sec)
+
+# Need all IP's hence '%'
+MariaDB [(none)]> CREATE USER 'user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.004 sec)
+
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON test.* TO 'user'@'%' IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.004 sec)
+
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]> SHOW GRANTS FOR 'user'@'%'; 
++-------------------------------------------------------------------------------------------------------------+
+| Grants for user@localhost                                                                                   |
++-------------------------------------------------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `user`@`localhost` IDENTIFIED BY PASSWORD '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19' |
+| GRANT ALL PRIVILEGES ON `test`.* TO `user`@`localhost`                                                      |
++-------------------------------------------------------------------------------------------------------------+
+2 rows in set (0.000 sec)
+
+MariaDB [(none)]> exit
+Bye
+root@3f69733aef31:/# mariadb -u user -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 5
+Server version: 11.6.2-MariaDB-ubu2404 mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use test
+Database changed
+MariaDB [test]> show tables;
+Empty set (0.004 sec)
+
+MariaDB [test]> exit
+```
 
 ## PostgreSQL
 
-Use `docker compose` to start, stop the container.
+> Warning
+> > Have been unable to connect to the container from Windows
+ 
+The Python versions of `psycopg2` and `psycopg2-binary` *DO NOT* install on Windows.
+
+You could try running `PostgeSQL` locally, [PostgreSQL Downloads](https://www.postgresql.org/download/) but might be 
+a lot of work.
+
+This is as far as I got...
+
+Use `docker compose (up -d|stop) postgres` to start, stop the container.
 
 Like the other containers it is configured on `dev_net` to isolate it from any other containers.
 
@@ -101,7 +207,7 @@ PS1>
 
 ## DbGate
 
-WebUI for managing the databases.
+WebUI for managing the databases, see the `compose.yaml` for the configuration details.
 
 Like the databases, User `admin`, with Password `admin`
 
