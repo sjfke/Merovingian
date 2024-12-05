@@ -39,7 +39,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MARIADB_ROOT_PASSWORD: example
+      MARIADB_ROOT_PASSWORD: admin
     volumes:
       - .\mariadb\data:/var/lib/mysql
 
@@ -59,6 +59,17 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: test
 
+  adminer:
+    container_name: adminer
+    image: ghcr.io/shyim/adminerevo:latest
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DESIGN: "nette"
+
   dbgate:
     container_name: dbgate
     image: dbgate/dbgate:alpine
@@ -73,24 +84,22 @@ services:
       BASIC_AUTH: true
       LOGINS: admin
       LOGIN_PASSWORD_admin: admin
-      CONNECTIONS: mysql, mongo # postgres
-      LABEL_mysql: MariaDB
-      SERVER_mysql: localhost
-      USER_mysql: root
-      PASSWORD_mysql: example
-      PORT_mysql: 3306
-      ENGINE_mysql: mysql@dbgate-plugin-mysql
-
-#      LABEL_con1: MongoDB
-#      URL_mongo: mongodb://root:example@mongo:27017/
-#      ENGINE_mongo: mongo@dbgate-plugin-mongo
-
-#      LABEL_postgres: Postgres
-#      SERVER_postgres: postgres
-#      PORT_postgres: 5432
-#      USER_postgres: admin
-#      PASSWORD_postgres: admin
-#      ENGINE_postgres: postgres@dbgate-plugin-postgres
+      CONNECTIONS: con1, con2, con3 # mongo, # postgres
+      LABEL_con1: MariaDB
+      SERVER_con1: localhost
+      USER_con1: root
+      PASSWORD_con1: admin
+      PORT_con1: 3306
+      ENGINE_con1: mysql@dbgate-plugin-mysql
+      LABEL_con2: MongoDB
+      URL_con2: mongodb://root:example@mongo:27017/
+      ENGINE_con2: mongo@dbgate-plugin-mongo
+      LABEL_con3: Postgres
+      SERVER_con3: postgres
+      PORT_con3: 5432
+      USER_con3: admin
+      PASSWORD_con3: admin
+      ENGINE_postgres: postgres@dbgate-plugin-postgres
 
 networks:
   dev_net:

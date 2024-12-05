@@ -167,17 +167,16 @@ Empty set (0.004 sec)
 MariaDB [test]> exit
 ```
 
-## PostgreSQL
+There is a test script in the `src` folder called `mariadb-test.py`
 
-> Warning
-> > Have been unable to connect to the container from Windows
+## PostgreSQL
  
 The Python versions of `psycopg2` and `psycopg2-binary` *DO NOT* install on Windows.
 
-You could try running `PostgeSQL` locally, [PostgreSQL Downloads](https://www.postgresql.org/download/) but might be 
-a lot of work.
+The pure python driver `pg8000` works with Python on Windows.
 
-This is as far as I got...
+* [PyPi pg8000 1.31.2](https://pypi.org/project/pg8000/)
+* [GitHub tlocke/pg8000](https://github.com/tlocke/pg8000/)
 
 Use `docker compose (up -d|stop) postgres` to start, stop the container.
 
@@ -205,7 +204,11 @@ test=# exit
 PS1>
 ```
 
+There is a test script in the `src` folder called `posgres-test.py`
+
 ## DbGate
+
+> Warning this not working and needs debugging.
 
 WebUI for managing the databases, see the `compose.yaml` for the configuration details.
 
@@ -221,8 +224,26 @@ PS1> docker compose up -d dbgate
 PS1> start "http://localhost:3000"
 ```
 
-The `dbgate-plugin-redis` fails to load, and so is not configured
-
 ## SRC
 
-Some simple example programs
+Some simple example programs. A virtual environment may need to be created.
+
+```console
+PS1> python -m venv venv
+PS1> venv\Scripts\activate
+(venv)> python -m pip install --upgrade pip
+(venv)> pip install -r requirements.txt --upgrade
+(venv)> python <test-program>.py
+(venv)> deactivate
+PS1>
+```
+
+| Program          | Description               |
+|------------------|---------------------------|
+| format-dates.py  | Date formatting example   |
+| odd-numbers.py   | Print odd number in range | 
+| valkey-test.py   | Simple Valkey example     |
+| mariadb-test.py  | Simple MariaDB example    |
+| postgres-test.py | Simple PostgreSQL example |
+
+
