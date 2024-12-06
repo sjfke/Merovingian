@@ -72,7 +72,7 @@ PS1> docker compose down valkey
 ```
 ## MariaDB
 
-The MariaDB `root` password is `example`, set in the `compose.yaml` file.
+The MariaDB `root` password is `admin`, set in the `compose.yaml` file.
 
 ```console
 PS1> docker exec -it mariadb bash
@@ -108,6 +108,7 @@ root@3f69733aef31:/# exit
 
 * [How to Create User With Grant Privileges in MariaDB](https://www.geeksforgeeks.org/how-to-create-user-with-grant-privileges-in-mariadb/)
 * [MySQL Cheatsheet](https://nonbleedingedge.com/cheatsheets/mysql.html)
+* [MySQL® Notes for Professionals book](https://goalkicker.com/MySQLBook/)
 
 Example of how to create a `user`, set hos password and `grant` access to the database `test`.
 
@@ -177,6 +178,7 @@ The pure python driver `pg8000` works with Python on Windows.
 
 * [PyPi pg8000 1.31.2](https://pypi.org/project/pg8000/)
 * [GitHub tlocke/pg8000](https://github.com/tlocke/pg8000/)
+* [PostgreSQL® Notes for Professionals book](https://goalkicker.com/PostgreSQLBook/)
 
 Use `docker compose (up -d|stop) postgres` to start, stop the container.
 
@@ -206,13 +208,35 @@ PS1>
 
 There is a test script in the `src` folder called `posgres-test.py`
 
+## MongoDB
+
+Use `docker compose` to start, stop the container.
+
+Like the other containers it is configured on `dev_net` to isolate it from any other containers.
+
+Like the other databases, User `admin`, with Password `admin`
+
+* [MongoDB](https://www.mongodb.com/)
+* [TutorialsPoint: MongoDB - Overview](https://www.tutorialspoint.com/mongodb/mongodb_overview.htm)
+* [TecAdmin: MongoDB Tutorials](https://tecadmin.net/tutorial/mongodb/mongodb-tutorials/)
+* [W3Schools: MongoDB Overview](https://www.w3schools.in/mongodb/overview)
+* [Welcome to MongoDB Shell (mongosh)](https://www.mongodb.com/docs/mongodb-shell/)
+* [Python MongoDB](https://www.w3schools.com/python/python_mongodb_getstarted.asp)
+* [GitHub mongo-express / mongo-express](https://github.com/mongo-express/mongo-express)
+
+```console
+PS1> docker exec -it mongodb sh      # Interactive Shell
+PS1> docker exec -it mongodb bash    # Interactive Bash Shell
+PS1> docker exec -it mongodb mongosh # Mongosh
+```
+
 ## DbGate
 
 > Warning this not working and needs debugging.
 
 WebUI for managing the databases, see the `compose.yaml` for the configuration details.
 
-Like the databases, User `admin`, with Password `admin`
+Like the other databases, User `admin`, with Password `admin`
 
 * [DbGate is cross-platform SQL+noSQL database client](https://dbgate.org/docs/index.html)
 * [Use storage database and administration for settings (Premium)](https://dbgate.org/docs/web-app-config.html)
@@ -245,5 +269,5 @@ PS1>
 | valkey-test.py   | Simple Valkey example     |
 | mariadb-test.py  | Simple MariaDB example    |
 | postgres-test.py | Simple PostgreSQL example |
-
+| mongodb-test.py  | Simple MongoDB example    |
 
