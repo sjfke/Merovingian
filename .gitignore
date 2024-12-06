@@ -1,6 +1,8 @@
 # Database folders
 valkey/data/
 postgres/data/
+mariadb/data
+mongodb/data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

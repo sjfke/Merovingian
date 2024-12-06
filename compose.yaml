@@ -30,6 +30,19 @@ services:
   #   volumes:
   #     - .\valkey\data:/data
 
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+    volumes:
+      - .\mariadb\data:/var/lib/mysql
+
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -46,9 +59,48 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: test
 
+  mongo:
+    container_name: mongodb
+    image: mongo
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - .\mongodb\data:/data/db
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+
+  adminer:
+    container_name: adminer
+    image: ghcr.io/shyim/adminerevo:latest
+    restart: unless-stopped
+    networks:
+      - dev_net
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DESIGN: "nette"
+
   dbgate:
     container_name: dbgate
-    image: dbgate/dbgate
+    image: dbgate/dbgate:alpine
     restart: unless-stopped
     networks:
       - dev_net
@@ -60,22 +112,22 @@ services:
       BASIC_AUTH: true
       LOGINS: admin
       LOGIN_PASSWORD_admin: admin
-      CONNECTIONS: postgres
-      # CONNECTIONS: postgres, valkey
-      LABEL_postgres: Postgres
-      SERVER_postgres: postgres
-      PORT_postgres: 5432
-      USER_postgres: admin
-      PASSWORD_postgres: admin
+      CONNECTIONS: con1, con2, con3 # mongo, # postgres
+      LABEL_con1: MariaDB
+      SERVER_con1: localhost
+      USER_con1: root
+      PASSWORD_con1: admin
+      PORT_con1: 3306
+      ENGINE_con1: mysql@dbgate-plugin-mysql
+      LABEL_con2: MongoDB
+      URL_con2: mongodb://admin:admin@mongo:27017/
+      ENGINE_con2: mongo@dbgate-plugin-mongo
+      LABEL_con3: Postgres
+      SERVER_con3: postgres
+      PORT_con3: 5432
+      USER_con3: admin
+      PASSWORD_con3: admin
       ENGINE_postgres: postgres@dbgate-plugin-postgres
-      # LABEL_valkey: valkey
-      # SERVER_valkey: valkey
-      # PORT_valkey: 6379
-      # USER_valkey: admin
-      # PASSWORD_valkey: admin
-      # URL_valkey: valkey://admin:admin@localhost:6379/0
-      # ENGINE_valkey: redis@dbgate-plugin-redis
-
 
 networks:
   dev_net:
