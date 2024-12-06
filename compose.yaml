@@ -1,21 +1,24 @@
 services:
 
-  app:
-    build:
-      context: ./app
-      dockerfile: ./Dockerfile
-    networks:
-      - dev_net
-    volumes:
-     - .\app:/app
-
+  # alpine:
+  #   container_name: alpine
+  #   build:
+  #     context: ./alpine
+  #     dockerfile: ./Dockerfile
+  #   networks:
+  #     - dev_net
+  #   volumes:
+  #    - .\alpine\src:/home/devel
 
   valkey:
+    container_name: valkey
     build:
       context: ./valkey
       dockerfile: ./Dockerfile
     networks:
       - dev_net
+    ports:
+      - "6379:6379"
     volumes:
       - .\valkey\data:/data/
 
@@ -25,9 +28,26 @@ services:
   #   networks:
   #     - dev_net
   #   volumes:
-  #     - .\valkey\data:/data/      
+  #     - .\valkey\data:/data
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: unless-stopped
+    shm_size: 128mb
+    networks:
+      - dev_net
+    ports:
+      - "5432:5432"
+    volumes:
+      - .\postgres\data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: test
 
   dbgate:
+    container_name: dbgate
     image: dbgate/dbgate
     restart: unless-stopped
     networks:
@@ -40,10 +60,22 @@ services:
       BASIC_AUTH: true
       LOGINS: admin
       LOGIN_PASSWORD_admin: admin
-      CONNECTIONS: con1
-      LABEL_con1: MongoDB
-      URL_con1: mongodb://root:example@mongo:27017/
-      ENGINE_con1: mongo@dbgate-plugin-mongo
+      CONNECTIONS: postgres
+      # CONNECTIONS: postgres, valkey
+      LABEL_postgres: Postgres
+      SERVER_postgres: postgres
+      PORT_postgres: 5432
+      USER_postgres: admin
+      PASSWORD_postgres: admin
+      ENGINE_postgres: postgres@dbgate-plugin-postgres
+      # LABEL_valkey: valkey
+      # SERVER_valkey: valkey
+      # PORT_valkey: 6379
+      # USER_valkey: admin
+      # PASSWORD_valkey: admin
+      # URL_valkey: valkey://admin:admin@localhost:6379/0
+      # ENGINE_valkey: redis@dbgate-plugin-redis
+
 
 networks:
   dev_net:
