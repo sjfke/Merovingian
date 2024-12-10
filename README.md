@@ -105,13 +105,13 @@ MariaDB [mysql]> exit;
 root@3f69733aef31:/# exit
 ```
 
-**NOTE:** `mariadb` and `mysql` are synonymous.
+**NOTE:** `SQLAlchemy` distinguishes between [MySQL and MariaDB](https://docs.sqlalchemy.org/en/20/dialects/mysql.html).
 
 * [How to Create User With Grant Privileges in MariaDB](https://www.geeksforgeeks.org/how-to-create-user-with-grant-privileges-in-mariadb/)
 * [MySQL Cheatsheet](https://nonbleedingedge.com/cheatsheets/mysql.html)
 * [MySQL® Notes for Professionals book](https://goalkicker.com/MySQLBook/)
 
-Example of how to create a `user`, set hos password and `grant` access to the database `test`.
+Example of how to create a `user`, set a password and `grant` access to the database `test`.
 
 ```console
 PS1> docker exec -it mariadb bash
@@ -130,7 +130,7 @@ MariaDB [(none)]>
 MariaDB [(none)]> create database test;
 Query OK, 1 row affected (0.007 sec)
 
-# Need all IP's hence '%'
+# Need all IP's hence '%' (Docker Network is 192.168.65.0/24)
 MariaDB [(none)]> CREATE USER 'user'@'%' IDENTIFIED BY 'password';
 Query OK, 0 rows affected (0.004 sec)
 
@@ -169,7 +169,7 @@ Empty set (0.004 sec)
 MariaDB [test]> exit
 ```
 
-There is a test script in the `src` folder called `mariadb-test.py`
+There is a test script in the `src` folder called [mariadb-test.py](./src/mariadb-test.py)
 
 ## PostgreSQL
  
