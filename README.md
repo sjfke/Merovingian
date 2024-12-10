@@ -255,10 +255,25 @@ Like the other databases, User `admin`, with Password `admin`
 * [GitHub mongo-express / mongo-express](https://github.com/mongo-express/mongo-express)
 
 ```console
+PS1> docker compose up -d mongodb
 PS1> docker exec -it mongodb sh      # Interactive Shell
 PS1> docker exec -it mongodb bash    # Interactive Bash Shell
 PS1> docker exec -it mongodb mongosh # Mongosh
+docker exec -it mongodb mongosh
+Current Mongosh Log ID: 67585e6ed11efa7bb4e94969
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.4
+Using MongoDB:          8.0.3
+Using Mongosh:          2.3.4
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+test> db
+test
+test> exit
+PS1> docker compose down mongodb
 ```
+
+There is a test script in the `src` folder called [mongodb-test.py](./src/mongodb-test.py)
 
 ## DbGate
 
@@ -284,21 +299,24 @@ PS1> docker compose down dbgate
 Some simple example programs. A virtual environment should be created.
 
 ```console
+PS1> docker compose up -d
 PS1> python -m venv venv
 PS1> venv\Scripts\activate
 (venv)> python -m pip install --upgrade pip
 (venv)> pip install -r requirements.txt --upgrade
 (venv)> python <test-program>.py
 (venv)> deactivate
+PS1> docker compose down
 PS1>
 ```
 
-| Program          | Description               |
-|------------------|---------------------------|
-| format-dates.py  | Date formatting example   |
-| odd-numbers.py   | Print odd number in range | 
-| valkey-test.py   | Simple Valkey example     |
-| mariadb-test.py  | Simple MariaDB example    |
-| postgres-test.py | Simple PostgreSQL example |
-| mongodb-test.py  | Simple MongoDB example    |
+| Program           | Description                 |
+|-------------------|-----------------------------|
+| format-dates.py   | Date formatting example     |
+| odd-numbers.py    | Print odd number in range   | 
+| valkey-test.py    | Simple Valkey example       |
+| valkey-example.py | Valkey Interactive examples |
+| mariadb-test.py   | Simple MariaDB example      |
+| postgres-test.py  | Simple PostgreSQL example   |
+| mongodb-test.py   | Simple MongoDB example      |
 
