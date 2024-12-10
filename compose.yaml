@@ -112,7 +112,7 @@ services:
       BASIC_AUTH: true
       LOGINS: admin
       LOGIN_PASSWORD_admin: admin
-      CONNECTIONS: con1,con2,con3  # NB no spaces between ','
+      CONNECTIONS: con1,con2,con3,con4  # NB no spaces between ','
 
       LABEL_con1: MariaDB
       SERVER_con1: mariadb
@@ -131,6 +131,11 @@ services:
       USER_con3: admin
       PASSWORD_con3: admin
       ENGINE_con3: postgres@dbgate-plugin-postgres
+
+      LABEL_con4: Valkey
+      SERVER_con4: valkey
+      PORT_con4: 6379
+      ENGINE_con4: redis@dbgate-plugin-redis
 
 networks:
   dev_net:

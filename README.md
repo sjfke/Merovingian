@@ -233,25 +233,26 @@ PS1> docker exec -it mongodb mongosh # Mongosh
 
 ## DbGate
 
-> Warning this not working and needs debugging.
-
-WebUI for managing the databases, see the `compose.yaml` for the configuration details.
+A sophisticated WebUI for managing the databases, see the `compose.yaml` for the configuration details.
 
 Like the other databases, User `admin`, with Password `admin`
 
 * [DbGate is cross-platform SQL+noSQL database client](https://dbgate.org/docs/index.html)
 * [Use storage database and administration for settings (Premium)](https://dbgate.org/docs/web-app-config.html)
+* [DbGate - Environment Variables](https://dbgate.org/docs/env-variables.html)
 
 ```console
 PS1> docker compose up -d dbgate
 
 # Open from Docker-Desktop or
 PS1> start "http://localhost:3000"
+
+PS1> docker compose down dbgate
 ```
 
 ## SRC
 
-Some simple example programs. A virtual environment may need to be created.
+Some simple example programs. A virtual environment should be created.
 
 ```console
 PS1> python -m venv venv
