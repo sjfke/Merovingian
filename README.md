@@ -1,4 +1,17 @@
-# Project
+# Merovingian
+
+He was an exiled program within the Matrix who figuratively appeared as one of the kingpin figures.
+
+> Choice is an illusion created between those with power and those without.
+>
+> -- <cite>The Merovingian</cite>
+
+The project demonstrates using various containers for SQL and NoSQL databases from within and outside `Docker`.
+
+All are configured to be accessible via the windows command line and store their data in a `data` subfolder.
+
+> Warning `alpine` is **not yet working**
+>> The `alpine` folder is an attempt to be able to run the various examples interactively from within the docker environment.
 
 ## Docker and Docker Compose
 
