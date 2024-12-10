@@ -177,6 +177,7 @@ The Python versions of `psycopg2` and `psycopg2-binary` *DO NOT* install on Wind
 
 The pure python driver `pg8000` works with Python on Windows.
 
+* [Python drivers for PostgreSQL](https://wiki.postgresql.org/wiki/Python)
 * [PyPi pg8000 1.31.2](https://pypi.org/project/pg8000/)
 * [GitHub tlocke/pg8000](https://github.com/tlocke/pg8000/)
 * [PostgreSQL® Notes for Professionals book](https://goalkicker.com/PostgreSQLBook/)
@@ -202,12 +203,40 @@ test=# select version();
  PostgreSQL 17.2 (Debian 17.2-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
 (1 row)
 
+test=# \l # show databases;
+                                                 List of databases
+   Name    | Owner | Encoding | Locale Provider |  Collate   |   Ctype    | Locale | ICU Rules | Access privileges
+-----------+-------+----------+-----------------+------------+------------+--------+-----------+-------------------
+ postgres  | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |
+ template0 | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | =c/admin         +
+           |       |          |                 |            |            |        |           | admin=CTc/admin
+ template1 | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | =c/admin         +
+           |       |          |                 |            |            |        |           | admin=CTc/admin
+ test      | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |
+(4 rows)
+
+test=# \dt # show tables;
+        List of relations
+ Schema |  Name   | Type  | Owner
+--------+---------+-------+-------
+ public | example | table | admin
+(1 row)
+
+test=# \d example # describe example
+                                   Table "public.example"
+ Column |         Type          | Collation | Nullable |               Default
+--------+-----------------------+-----------+----------+-------------------------------------
+ id     | integer               |           | not null | nextval('example_id_seq'::regclass)
+ name   | character varying(20) |           |          |
+Indexes:
+    "example_pkey" PRIMARY KEY, btree (id)
+    
 test=# exit
 # exit
-PS1>
+PS1> docker compose down postgres
 ```
 
-There is a test script in the `src` folder called `posgres-test.py`
+There is a test script in the `src` folder called [postgres-test.py](./src/postgres-test.py)
 
 ## MongoDB
 
