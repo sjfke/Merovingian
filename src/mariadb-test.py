@@ -8,7 +8,7 @@ engine = create_engine("mysql+pymysql://user:password@localhost:3306/test?charse
 # connection.close()
 
 with engine.connect() as connection:
-    connection.execute(text("CREATE TABLE example (id INTEGER, name VARCHAR(20))"))
+    connection.execute(text("CREATE TABLE example (id INT UNSIGNED AUTO_INCREMENT, name VARCHAR(20) NOT NULL, PRIMARY KEY(id))"))
     connection.execute(text("INSERT INTO example (name) VALUES (:name)"), {"name": "Ashley"})
     connection.execute(text("INSERT INTO example (name) VALUES (:name)"), [{"name": "Barry"}, {"name": "Christina"}])
     connection.commit()

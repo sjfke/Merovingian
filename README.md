@@ -1,4 +1,17 @@
-# Project
+# Merovingian
+
+He was an exiled program within the Matrix who figuratively appeared as one of the kingpin figures.
+
+> Choice is an illusion created between those with power and those without.
+>
+> -- <cite>The Merovingian</cite>
+
+The project demonstrates using various containers for SQL and NoSQL databases from within and outside `Docker`.
+
+All are configured to be accessible via the windows command line and store their data in a `data` subfolder.
+
+> Warning `alpine` is **not yet working**
+>> The `alpine` folder is an attempt to be able to run the various examples interactively from within the docker environment.
 
 ## Docker and Docker Compose
 
@@ -20,6 +33,7 @@ Reference documentation
 * [Documentation: Valkey configuration](https://valkey.io/topics/valkey.conf/)
 * [Valkey: Documentation by topic](https://valkey.io/topics/)
 * [Valkey: Command Reference](https://valkey.io/commands/)
+* [valkey-py - Core Commands](https://valkey-py.readthedocs.io/en/latest/commands.html#core-commands)
 * [How to Use the Redis Docker Official Image](https://www.docker.com/blog/how-to-use-the-redis-docker-official-image/)
 
 Use `docker compose` to start, stop the container.
@@ -104,13 +118,13 @@ MariaDB [mysql]> exit;
 root@3f69733aef31:/# exit
 ```
 
-**NOTE:** `mariadb` and `mysql` are synonymous.
+**NOTE:** `SQLAlchemy` distinguishes between [MySQL and MariaDB](https://docs.sqlalchemy.org/en/20/dialects/mysql.html).
 
 * [How to Create User With Grant Privileges in MariaDB](https://www.geeksforgeeks.org/how-to-create-user-with-grant-privileges-in-mariadb/)
 * [MySQL Cheatsheet](https://nonbleedingedge.com/cheatsheets/mysql.html)
 * [MySQL® Notes for Professionals book](https://goalkicker.com/MySQLBook/)
 
-Example of how to create a `user`, set hos password and `grant` access to the database `test`.
+Example of how to create a `user`, set a password and `grant` access to the database `test`.
 
 ```console
 PS1> docker exec -it mariadb bash
@@ -129,7 +143,7 @@ MariaDB [(none)]>
 MariaDB [(none)]> create database test;
 Query OK, 1 row affected (0.007 sec)
 
-# Need all IP's hence '%'
+# Need all IP's hence '%' (Docker Network is 192.168.65.0/24)
 MariaDB [(none)]> CREATE USER 'user'@'%' IDENTIFIED BY 'password';
 Query OK, 0 rows affected (0.004 sec)
 
@@ -168,7 +182,7 @@ Empty set (0.004 sec)
 MariaDB [test]> exit
 ```
 
-There is a test script in the `src` folder called `mariadb-test.py`
+There is a test script in the `src` folder called [mariadb-test.py](./src/mariadb-test.py)
 
 ## PostgreSQL
  
@@ -176,6 +190,7 @@ The Python versions of `psycopg2` and `psycopg2-binary` *DO NOT* install on Wind
 
 The pure python driver `pg8000` works with Python on Windows.
 
+* [Python drivers for PostgreSQL](https://wiki.postgresql.org/wiki/Python)
 * [PyPi pg8000 1.31.2](https://pypi.org/project/pg8000/)
 * [GitHub tlocke/pg8000](https://github.com/tlocke/pg8000/)
 * [PostgreSQL® Notes for Professionals book](https://goalkicker.com/PostgreSQLBook/)
@@ -201,12 +216,40 @@ test=# select version();
  PostgreSQL 17.2 (Debian 17.2-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
 (1 row)
 
+test=# \l # show databases;
+                                                 List of databases
+   Name    | Owner | Encoding | Locale Provider |  Collate   |   Ctype    | Locale | ICU Rules | Access privileges
+-----------+-------+----------+-----------------+------------+------------+--------+-----------+-------------------
+ postgres  | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |
+ template0 | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | =c/admin         +
+           |       |          |                 |            |            |        |           | admin=CTc/admin
+ template1 | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | =c/admin         +
+           |       |          |                 |            |            |        |           | admin=CTc/admin
+ test      | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |
+(4 rows)
+
+test=# \dt # show tables;
+        List of relations
+ Schema |  Name   | Type  | Owner
+--------+---------+-------+-------
+ public | example | table | admin
+(1 row)
+
+test=# \d example # describe example
+                                   Table "public.example"
+ Column |         Type          | Collation | Nullable |               Default
+--------+-----------------------+-----------+----------+-------------------------------------
+ id     | integer               |           | not null | nextval('example_id_seq'::regclass)
+ name   | character varying(20) |           |          |
+Indexes:
+    "example_pkey" PRIMARY KEY, btree (id)
+    
 test=# exit
 # exit
-PS1>
+PS1> docker compose down postgres
 ```
 
-There is a test script in the `src` folder called `posgres-test.py`
+There is a test script in the `src` folder called [postgres-test.py](./src/postgres-test.py)
 
 ## MongoDB
 
@@ -225,49 +268,68 @@ Like the other databases, User `admin`, with Password `admin`
 * [GitHub mongo-express / mongo-express](https://github.com/mongo-express/mongo-express)
 
 ```console
+PS1> docker compose up -d mongodb
 PS1> docker exec -it mongodb sh      # Interactive Shell
 PS1> docker exec -it mongodb bash    # Interactive Bash Shell
 PS1> docker exec -it mongodb mongosh # Mongosh
+docker exec -it mongodb mongosh
+Current Mongosh Log ID: 67585e6ed11efa7bb4e94969
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.4
+Using MongoDB:          8.0.3
+Using Mongosh:          2.3.4
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+test> db
+test
+test> exit
+PS1> docker compose down mongodb
 ```
+
+There is a test script in the `src` folder called [mongodb-test.py](./src/mongodb-test.py)
 
 ## DbGate
 
-> Warning this not working and needs debugging.
-
-WebUI for managing the databases, see the `compose.yaml` for the configuration details.
+A sophisticated WebUI for managing the databases, see the `compose.yaml` for the configuration details.
 
 Like the other databases, User `admin`, with Password `admin`
 
 * [DbGate is cross-platform SQL+noSQL database client](https://dbgate.org/docs/index.html)
 * [Use storage database and administration for settings (Premium)](https://dbgate.org/docs/web-app-config.html)
+* [DbGate - Environment Variables](https://dbgate.org/docs/env-variables.html)
 
 ```console
 PS1> docker compose up -d dbgate
 
 # Open from Docker-Desktop or
 PS1> start "http://localhost:3000"
+
+PS1> docker compose down dbgate
 ```
 
 ## SRC
 
-Some simple example programs. A virtual environment may need to be created.
+Some simple example programs. A virtual environment should be created.
 
 ```console
+PS1> docker compose up -d
 PS1> python -m venv venv
 PS1> venv\Scripts\activate
 (venv)> python -m pip install --upgrade pip
 (venv)> pip install -r requirements.txt --upgrade
 (venv)> python <test-program>.py
 (venv)> deactivate
+PS1> docker compose down
 PS1>
 ```
 
-| Program          | Description               |
-|------------------|---------------------------|
-| format-dates.py  | Date formatting example   |
-| odd-numbers.py   | Print odd number in range | 
-| valkey-test.py   | Simple Valkey example     |
-| mariadb-test.py  | Simple MariaDB example    |
-| postgres-test.py | Simple PostgreSQL example |
-| mongodb-test.py  | Simple MongoDB example    |
+| Program           | Description                 |
+|-------------------|-----------------------------|
+| format-dates.py   | Date formatting example     |
+| odd-numbers.py    | Print odd number in range   | 
+| valkey-test.py    | Simple Valkey example       |
+| valkey-example.py | Valkey Interactive examples |
+| mariadb-test.py   | Simple MariaDB example      |
+| postgres-test.py  | Simple PostgreSQL example   |
+| mongodb-test.py   | Simple MongoDB example      |
 
