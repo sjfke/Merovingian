@@ -34,4 +34,4 @@ for i in x.inserted_ids:
 collection.find_one({ "name": "Ashley" }) # {'_id': ObjectId('67530cd7f6cce3bb6abb86ba'), 'name': 'Ashley'}
 
 # Close the connection
-collection.close()
+client.close()
