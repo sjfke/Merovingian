@@ -20,7 +20,7 @@ PS1> docker compose build alpine
 PS1> docker compose up -d alpine
 ```
 
-An alternative, untested approach, is to modify with `requiremnts.txt` file in the running `alpine` container
+An alternative, untested approach, is to modify with `requirements.txt` file in the running `alpine` container
 
 ```console
 # Update the requirements.txt file
