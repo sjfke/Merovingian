@@ -1,14 +1,14 @@
 services:
 
-  # alpine:
-  #   container_name: alpine
-  #   build:
-  #     context: ./alpine
-  #     dockerfile: ./Dockerfile
-  #   networks:
-  #     - dev_net
-  #   volumes:
-  #    - .\alpine\src:/home/devel
+  alpine:
+     container_name: alpine
+     build:
+       context: ./alpine
+       dockerfile: ./Dockerfile
+     networks:
+       - dev_net
+     volumes:
+      - .\alpine\repo:/home/devel/repo
 
   valkey:
     container_name: valkey

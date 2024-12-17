@@ -1,5 +1,8 @@
 # Database folders
 valkey/data/*
+alpine/.venv/
+alpine/venv/
+alpine/src/
 postgres/data/*
 mariadb/data/*
 mongodb/data/*

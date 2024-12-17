@@ -9,7 +9,8 @@ import pymongo
 # Close the client connection
 # client.close()
 
-client = pymongo.MongoClient("mongodb://admin:admin@localhost:27017/")
+# client = pymongo.MongoClient("mongodb://admin:admin@localhost:27017/")
+client = pymongo.MongoClient("mongodb://admin:admin@mongo:27017/")
 
 db = client["test"]
 print(client.list_database_names()) # "test" is not created until you add content
