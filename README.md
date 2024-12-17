@@ -309,7 +309,10 @@ PS1> docker compose down dbgate
 
 ## SRC
 
-Some simple example programs. A virtual environment should be created.
+Some simple example programs that work from your local system. 
+The docker containers need to be running and are accessed via `localhost`
+
+A virtual environment should be created.
 
 ```console
 PS1> docker compose up -d
@@ -333,3 +336,31 @@ PS1>
 | postgres-test.py  | Simple PostgreSQL example   |
 | mongodb-test.py   | Simple MongoDB example      |
 
+## Alpine
+
+Is an example development container, based on the official `python-alpine` container.
+
+> Please see `README.md` in the `alpine` folder for specifics.
+
+It communicates with the other containers over the Docker `dev_net` network.
+
+The local `alpine\repo` folder is mounted in a `devel` account and provide access to run the source code. 
+
+```console
+PS1> docker compose up -d dbgate
+PS1> docker exec -it alpine ash
+PS1> docker compose down alpine
+```
+
+The same examples as the `src` folder but using the docker `service` names, rather than `localhost` to 
+create the connection.
+
+| Program           | Description                 |
+|-------------------|-----------------------------|
+| format-dates.py   | Date formatting example     |
+| odd-numbers.py    | Print odd number in range   | 
+| valkey-test.py    | Simple Valkey example       |
+| valkey-example.py | Valkey Interactive examples |
+| mariadb-test.py   | Simple MariaDB example      |
+| postgres-test.py  | Simple PostgreSQL example   |
+| mongodb-test.py   | Simple MongoDB example      |

@@ -8,7 +8,7 @@ services:
      networks:
        - dev_net
      volumes:
-      - .\alpine\src:/home/devel
+      - .\alpine\repo:/home/devel/repo
 
   valkey:
     container_name: valkey

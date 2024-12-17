@@ -19,6 +19,9 @@ RUN adduser -g "Developer" -D -h /home/devel --uid ${UID} --shell /bin/ash devel
 # https://rehansaeed.com/gitattributes-best-practices/
 RUN echo "permit persist :wheel" > /etc/doas.conf && chown -c root:root /etc/doas.conf && chmod -c 0400 /etc/doas.conf
 
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
 USER ${UID}
 # USER 0
 
