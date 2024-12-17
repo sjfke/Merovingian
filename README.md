@@ -10,9 +10,6 @@ The project demonstrates using various containers for SQL and NoSQL databases fr
 
 All are configured to be accessible via the windows command line and store their data in a `data` subfolder.
 
-> Warning `alpine` is **not yet working**
->> The `alpine` folder is an attempt to be able to run the various examples interactively from within the docker environment.
-
 ## Docker and Docker Compose
 
 * [Docker CLI](https://docs.docker.com/reference/cli/docker/)
