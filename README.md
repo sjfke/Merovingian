@@ -295,6 +295,20 @@ Like the other databases, User `admin`, with Password `admin`
 * [Use storage database and administration for settings (Premium)](https://dbgate.org/docs/web-app-config.html)
 * [DbGate - Environment Variables](https://dbgate.org/docs/env-variables.html)
 
+Unlike other containers `DbGate` is not configured to store its data on the local system but in a `docker volume`, 
+so this must be created before trying to start the `dbgate` service.
+
+```console
+PS1> docker volume create dbgate-data 
+PS1> docker volume ls
+DRIVER    VOLUME NAME
+local     64ade407fdcd1a212cdc45be88912b3b7bd568cf37b4ffc97ef556043461a818
+local     295a1fe10ebb426f70b1f00eac472897c7482bed9bce4df2842ef2956cf07ba3
+local     756c8b618be37350b915d98fe9e14b83e26df32b34d99eee2b189b17747ddd1c
+local     dbgate-data
+```
+To start and stop the service.
+
 ```console
 PS1> docker compose up -d dbgate
 
@@ -304,6 +318,11 @@ PS1> start "http://localhost:3000"
 PS1> docker compose down dbgate
 ```
 
+When the `dbgate` service is no longer required do not forget to delete the `docker volume`
+
+```console
+PS1> docker volume rm dbgate-data
+```
 ## SRC
 
 Some simple example programs that work from your local system. 
@@ -341,7 +360,7 @@ Is an example development container, based on the official `python-alpine` conta
 
 It communicates with the other containers over the Docker `dev_net` network.
 
-The local `alpine\repo` folder is mounted in a `devel` account and provide access to run the source code. 
+The local `alpine\repo` folder is mounted in a `devel` account and provides access to run the source code. 
 
 ```console
 PS1> docker compose up -d dbgate
@@ -361,3 +380,11 @@ create the connection.
 | mariadb-test.py   | Simple MariaDB example      |
 | postgres-test.py  | Simple PostgreSQL example   |
 | mongodb-test.py   | Simple MongoDB example      |
+
+The source code is best edited on your local system.
+
+Your local system is probably not Linux, so be aware of 
+*"Windows/MacOS Unix line ending madness when using GIT on Windows"*
+
+* [Configuring Git to handle line endings](https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings)
+* [gitattributes - Best Practices](https://rehansaeed.com/gitattributes-best-practices/)
