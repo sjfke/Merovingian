@@ -321,7 +321,7 @@ PS1> docker compose down dbgate
 When the `dbgate` service is no longer required do not forget to delete the `docker volume`
 
 ```console
-PS1>  docker volume rm dbgate-data
+PS1> docker volume rm dbgate-data
 ```
 ## SRC
 
@@ -360,7 +360,7 @@ Is an example development container, based on the official `python-alpine` conta
 
 It communicates with the other containers over the Docker `dev_net` network.
 
-The local `alpine\repo` folder is mounted in a `devel` account and provide access to run the source code. 
+The local `alpine\repo` folder is mounted in a `devel` account and provides access to run the source code. 
 
 ```console
 PS1> docker compose up -d dbgate
@@ -380,3 +380,11 @@ create the connection.
 | mariadb-test.py   | Simple MariaDB example      |
 | postgres-test.py  | Simple PostgreSQL example   |
 | mongodb-test.py   | Simple MongoDB example      |
+
+The source code is best edited on your local system.
+
+Your local system is probably not Linux, so be aware of 
+*"Windows/MacOS Unix line ending madness when using GIT on Windows"*
+
+* [Configuring Git to handle line endings](https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings)
+* [gitattributes - Best Practices](https://rehansaeed.com/gitattributes-best-practices/)
