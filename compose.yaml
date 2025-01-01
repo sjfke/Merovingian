@@ -87,8 +87,8 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
       ME_CONFIG_BASICAUTH: false
 
-  adminer:
-    container_name: adminer
+  Adminerevo:
+    container_name: adminerevo
     image: ghcr.io/shyim/adminerevo:latest
     restart: unless-stopped
     networks:

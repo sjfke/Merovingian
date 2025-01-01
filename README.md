@@ -181,6 +181,37 @@ MariaDB [test]> exit
 
 There is a test script in the `src` folder called [mariadb-test.py](./src/mariadb-test.py)
 
+## Adminerevo
+
+`Adminerevo` is a fork of Adminer, but it's better maintained and has more features.
+
+It's a full-featured database management tool written in PHP, which supports
+
+* `MySQL`, `MariaDB`, `PostgreSQL`, `SQLite`, `MS SQL`, `Oracle`, `Elasticsearch` and `MongoDB`.
+
+Useful references
+
+* [DockerHub: Adminerevo](https://hub.docker.com/r/shyim/adminerevo)
+* [GitHub: shyim/adminerevo-docker](https://github.com/shyim/adminerevo-docker)
+
+`Adminerevo` is normally installed alongside the database in the same container but here it uses a standalone container. 
+
+**Note:** `MongoDB` was not working when this documentation as written.
+
+```console
+PS1> docker compose up -d adminrevo
+PS1> start "http://127.0.1.1:8080"
+PS1> docker compose down adminrevo
+```
+
+The *WebUI Login* details are as follows:
+
+| System     | Server   | Username | Password | Database |
+|------------|----------|----------|----------|----------|
+| MySQL      | mariadb  | user     | password |          |
+| PostgreSQL | postgres | admin    | admin    |          |
+
+
 ## PostgreSQL
  
 The Python versions of `psycopg2` and `psycopg2-binary` *DO NOT* install on Windows.
