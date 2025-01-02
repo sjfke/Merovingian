@@ -10,6 +10,13 @@ The project demonstrates using various containers for SQL and NoSQL databases fr
 
 All are configured to be accessible via the windows command line and store their data in a `data` subfolder.
 
+Although not tested, the project should also work ``as-is`` on a UNIX platform with `docker` installed or 
+using the `docker-compose` module for `Podman`.
+
+* [Install Docker Desktop on Linux](https://docs.docker.com/desktop/setup/install/linux/)
+* [How to use docker-compose with Podman on Linux](https://linuxconfig.org/how-to-use-docker-compose-with-podman-on-linux)
+* [`podman kube generate` Generate Kubernetes YAML based on containers, pods or volumes](https://docs.podman.io/en/latest/markdown/podman-kube-generate.1.html)
+
 ## Docker and Docker Compose
 
 * [Docker CLI](https://docs.docker.com/reference/cli/docker/)
@@ -17,7 +24,9 @@ All are configured to be accessible via the windows command line and store their
 * [Sharing local files with containers](https://docs.docker.com/get-started/docker-concepts/running-containers/sharing-local-files/)
 * [Volumes](https://docs.docker.com/engine/storage/volumes/)
 
-## Valkey
+## SQL and NoSQL Databases
+
+### Valkey
 
 It is a port of 'redis', so 'redis' tutorials should be usable.
 
@@ -36,7 +45,7 @@ Reference documentation
 Use `docker compose` to start, stop the container.
 
 * `valkey` service builds the container, copying a configuration template, into `/usr/local`
-* `valkey-vanilla`, which is commented-out, deploys the one from DockerHub, with any configuration
+* `valkey-vanilla`, which is commented-out, deploys the one from DockerHub, with a default configuration
 
 Both mount `valkey\data` so the files are stored locally on Windows
 
@@ -81,7 +90,7 @@ PS1> docker exec -it valkey valkey-cli
 
 PS1> docker compose down valkey
 ```
-## MariaDB
+### MariaDB
 
 The MariaDB `root` password is `admin`, set in the `compose.yaml` file.
 
@@ -137,7 +146,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 MariaDB [(none)]>
 MariaDB [(none)]>
-MariaDB [(none)]> create database test;
+MariaDB [(none)]> CREATE DATABASE test;
 Query OK, 1 row affected (0.007 sec)
 
 # Need all IP's hence '%' (Docker Network is 192.168.65.0/24)
@@ -181,7 +190,7 @@ MariaDB [test]> exit
 
 There is a test script in the `src` folder called [mariadb-test.py](./src/mariadb-test.py)
 
-## PostgreSQL
+### PostgreSQL
  
 The Python versions of `psycopg2` and `psycopg2-binary` *DO NOT* install on Windows.
 
@@ -202,18 +211,31 @@ PS1> docker compose up -d postgres
 ## Login to container and Test `psql` interface:
 PS1> docker exec -it postgres sh
 #
-# psql -U admin -W test
+# psql -U admin -W postgres
 Password:
 psql (17.2 (Debian 17.2-1.pgdg120+1))
 Type "help" for help.
 
-test=# select version();
+postgres=# select version();
                                                        version
 ---------------------------------------------------------------------------------------------------------------------
  PostgreSQL 17.2 (Debian 17.2-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
 (1 row)
 
-test=# \l # show databases;
+postgres=# \l
+                                                 List of databases
+   Name    | Owner | Encoding | Locale Provider |  Collate   |   Ctype    | Locale | ICU Rules | Access privileges
+-----------+-------+----------+-----------------+------------+------------+--------+-----------+-------------------
+ postgres  | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |
+ template0 | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | =c/admin         +
+           |       |          |                 |            |            |        |           | admin=CTc/admin
+ template1 | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           | =c/admin         +
+           |       |          |                 |            |            |        |           | admin=CTc/admin
+(3 rows)
+
+postgres=# CREATE DATABASE test;
+CREATE DATABASE
+postgres=# \l
                                                  List of databases
    Name    | Owner | Encoding | Locale Provider |  Collate   |   Ctype    | Locale | ICU Rules | Access privileges
 -----------+-------+----------+-----------------+------------+------------+--------+-----------+-------------------
@@ -224,22 +246,43 @@ test=# \l # show databases;
            |       |          |                 |            |            |        |           | admin=CTc/admin
  test      | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |        |           |
 (4 rows)
+```
 
-test=# \dt # show tables;
+Create `example` database using either the `localhost` or from the `alpine` container.
+
+```console
+PS1> cd src
+PS1> .\venv\Scripts\activate
+PS1> python .\postgres-test.py
+```
+
+```console
+PS1> docker exec it posgres sh
+#  psql -U admin -W test
+
+test=# \dt
         List of relations
  Schema |  Name   | Type  | Owner
 --------+---------+-------+-------
  public | example | table | admin
 (1 row)
 
-test=# \d example # describe example
+test=# \d example
                                    Table "public.example"
  Column |         Type          | Collation | Nullable |               Default
 --------+-----------------------+-----------+----------+-------------------------------------
  id     | integer               |           | not null | nextval('example_id_seq'::regclass)
- name   | character varying(20) |           |          |
+ name   | character varying(20) |           | not null |
 Indexes:
     "example_pkey" PRIMARY KEY, btree (id)
+
+test=# select * from example;
+ id |   name
+----+-----------
+  1 | Ashley
+  2 | Barry
+  3 | Christina
+(3 rows)
     
 test=# exit
 # exit
@@ -248,7 +291,8 @@ PS1> docker compose down postgres
 
 There is a test script in the `src` folder called [postgres-test.py](./src/postgres-test.py)
 
-## MongoDB
+
+### MongoDB
 
 Use `docker compose` to start, stop the container.
 
@@ -285,7 +329,39 @@ PS1> docker compose down mongodb
 
 There is a test script in the `src` folder called [mongodb-test.py](./src/mongodb-test.py)
 
-## DbGate
+## Database Administration tools
+
+### AdminerEvo
+
+`AdminerEvo` is a fork of Adminer, but it's better maintained and has more features.
+
+It's a full-featured database management tool written in PHP, which supports
+
+* `MySQL`, `MariaDB`, `PostgreSQL`, `SQLite`, `MS SQL`, `Oracle`, `Elasticsearch` and `MongoDB`.
+
+Useful references
+
+* [DockerHub: Adminerevo](https://hub.docker.com/r/shyim/adminerevo)
+* [GitHub: shyim/adminerevo-docker](https://github.com/shyim/adminerevo-docker)
+
+`Adminerevo` is normally installed alongside the database in the same container but here it uses a standalone container. 
+
+**Note:** `MongoDB` was not working when this documentation as written.
+
+```console
+PS1> docker compose up -d adminrevo
+PS1> start "http://127.0.1.1:8080"
+PS1> docker compose down adminrevo
+```
+
+The *WebUI Login* details are as follows:
+
+| System     | Server   | Username | Password | Database |
+|------------|----------|----------|----------|----------|
+| MySQL      | mariadb  | user     | password |          |
+| PostgreSQL | postgres | admin    | admin    |          |
+
+### DbGate
 
 A sophisticated WebUI for managing the databases, see the `compose.yaml` for the configuration details.
 
@@ -323,7 +399,31 @@ When the `dbgate` service is no longer required do not forget to delete the `doc
 ```console
 PS1> docker volume rm dbgate-data
 ```
-## SRC
+
+### Mongo-Express
+
+`mongo-express` is a web-based MongoDB admin interface written in `Node.js`, `Express.js`, and `Bootstrap3`.
+
+Useful references
+
+* [DockerHub: Mongo Express](https://hub.docker.com/_/mongo-express/)
+* [GitHub: Mongo Express](https://github.com/mongo-express/mongo-express)
+
+> Security Notice
+>
+> JSON documents are parsed through a javascript virtual machine, so the web interface can be used for executing malicious javascript on a server.
+>
+> `mongo-express` should only be used privately for development purposes.
+
+```console
+PS1> docker compose up -d mongo-express
+PS1> start "http://127.0.1.1:8081"
+PS1> docker compose down mongo-express
+```
+
+## Interaction and Testing
+
+### SRC
 
 Some simple example programs that work from your local system. 
 The docker containers need to be running and are accessed via `localhost`
@@ -352,7 +452,7 @@ PS1>
 | postgres-test.py  | Simple PostgreSQL example   |
 | mongodb-test.py   | Simple MongoDB example      |
 
-## Alpine
+### Alpine
 
 Is an example development container, based on the official `python-alpine` container.
 
