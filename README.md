@@ -327,6 +327,14 @@ test> exit
 PS1> docker compose down mongodb
 ```
 
+> **Warning**
+> 
+> For `MongoDB` to search the `data` folder, it will create an automatic `docker volume` into which it mounts 
+> Windows `mongodb\data` folder. 
+> 
+> The `docker volume` is not removed when the `service` is stopped, so periodically run `docker volume prune` 
+> to remove any unused `docker volumes`.
+
 There is a test script in the `src` folder called [mongodb-test.py](./src/mongodb-test.py)
 
 ## Database Administration tools
