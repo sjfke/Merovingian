@@ -1,6 +1,6 @@
 asn1crypto==1.5.1
 dnspython==2.8.0
-git greenlet==3.2.4
+greenlet==3.2.4
 pg8000==1.31.5
 pymongo==4.15.3
 PyMySQL==1.1.2
