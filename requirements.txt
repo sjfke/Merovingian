@@ -2,9 +2,9 @@ asn1crypto==1.5.1
 dnspython==2.8.0
 greenlet==3.2.4
 pg8000==1.31.5
-pymongo==4.15.3
+pymongo==4.15.4
 PyMySQL==1.1.2
-python-dateutil==2.9.0.post0
+python-dateutil==2.9.0
 pytz==2025.2
 scramp==1.4.6
 six==1.17.0
