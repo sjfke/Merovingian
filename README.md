@@ -24,6 +24,72 @@ using the `docker-compose` module for `Podman`.
 * [Sharing local files with containers](https://docs.docker.com/get-started/docker-concepts/running-containers/sharing-local-files/)
 * [Volumes](https://docs.docker.com/engine/storage/volumes/)
 
+## For the Impatient, _TLDR;_
+
+```console
+PS1> docker volume create dbgate-data 
+
+PS1> docker compose up -d
+PS1> docker ps --format '{{.Names}}\t{{.ID}}\t{{.Image}}'
+postgres        cbf27b757154    postgres:latest
+mariadb 4a99944e6574    mariadb:latest
+alpine  8a03414d413b    merovingian-alpine
+mongodb bb5d5857eb78    mongo
+valkey  bb8163502e5d    merovingian-valkey
+mongo-express   a77d231c2bf0    mongo-express
+adminerevo      748112fa6cdb    ghcr.io/shyim/adminerevo:latest
+dbgate  0588e3cc9e01    dbgate/dbgate:alpine
+
+PS1> $ docker container ls --format '{{.Names}}\t{{.ID}}\t{{.Image}}'
+```
+For containers based on ``Alpine Linux``, there is no ``bash`` so use ``ash``
+
+```console
+PS1> docker exec -it postgres /bin/bash
+PS1> docker exec -it mariadb /bin/bash
+PS1> docker exec -it alpine /bin/ash
+PS1> docker exec -it mongodb mongosh
+PS1> docker exec -it valkey /bin/ash
+```
+
+Database Management Web Interfaces
+
+```console
+PS1> start http://localhost:8080 # adminerevo
+PS1> start http://localhost:8080 # mongo-express
+PS1> start http://localhost:3000 # dbgate
+```
+
+Shutdown ``Merovingian`` containers
+
+```console
+PS1> docker compose down
+```
+
+Clean up if finished with the project
+
+```console
+PS1> docker compose down
+
+# Clean-up images
+PS1> docker image rm mariadb:latest
+PS1> docker image rm merovingian-alpine
+PS1> docker image rm mongo
+PS1> docker image rm merovingian-valkey
+PS1> docker image rm mongo-express
+PS1> docker image rm ghcr.io/shyim/adminerevo:latest
+PS1> docker image rm dbgate/dbgate:alpine
+
+# Optionally prune danglining images  
+PS1>  docker image prune
+WARNING! This will remove all dangling images.
+Are you sure you want to continue? [y/N] y
+
+# Remove DBgate volume
+PS1> docker volume rm dbgate-data
+```
+
+
 ## SQL and NoSQL Databases
 
 ### Valkey
