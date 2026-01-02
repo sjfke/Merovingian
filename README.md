@@ -320,6 +320,16 @@ Create `example` database using either the `localhost` or from the `alpine` cont
 PS1> cd src
 PS1> .\venv\Scripts\activate
 PS1> python .\postgres-test.py
+Author: Ashley
+PS1>
+
+# Alpine Container
+PS1> docker exec -it alpine /bin/ash
+~ $ cd repo
+~/repo $ python postgres-test.py
+Author: Ashley
+~/repo $ exit
+PS1>
 ```
 
 ```console
