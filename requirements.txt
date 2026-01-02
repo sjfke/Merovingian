@@ -8,8 +8,8 @@ python-dateutil==2.9.0
 pytz==2025.2
 scramp==1.4.6
 six==1.17.0
-SQLAlchemy==2.0.44
+SQLAlchemy==2.0.45
 typing_extensions==4.15.0
-tzdata==2025.2
+tzdata==2025.3
 tzlocal==5.3.1
 valkey==6.1.1
