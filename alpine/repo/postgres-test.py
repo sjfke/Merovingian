@@ -14,7 +14,7 @@ engine = create_engine("postgresql+pg8000://admin:admin@postgres:5432/test")
 # connection.close()
 
 with engine.connect() as connection:
-    connection.execute(text("CREATE TABLE example (id SERIAL PRIMARY KEY, name VARCHAR(20) NOT NULL)"))
+    connection.execute(text("CREATE TABLE IF NOT EXISTS example (id SERIAL PRIMARY KEY, name VARCHAR(20) NOT NULL)"))
     connection.execute(text("INSERT INTO example (name) VALUES (:name)"), {"name": "Ashley"})
     connection.execute(text("INSERT INTO example (name) VALUES (:name)"), [{"name": "Barry"}, {"name": "Christina"}])
     connection.commit()
