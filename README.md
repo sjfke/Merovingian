@@ -60,6 +60,27 @@ PS1> start http://localhost:8081 # mongo-express
 PS1> start http://localhost:3000 # dbgate
 ```
 
+Before running the test scripts for the first time on ``localhost`` or the ``Alpine`` container, set up the databases.
+
+```console
+# MariaDB - create the 'test' database and grant 'user' access
+PS1> docker exec -it mariadb /bin/bash
+root@2fff29ee0a4f:/# mariadb -u root -p
+sql> CREATE DATABASE test;
+sql> GRANT ALL PRIVILEGES ON test.* TO 'user'@'%' IDENTIFIED BY 'password';
+sql> FLUSH PRIVILEGES;
+sql> SHOW GRANTS FOR 'user'@'%';
+sql> QUIT;
+root@2fff29ee0a4f:/# exit
+
+# Postgres - Create the 'test' database
+PS1> docker exec -it postgres bash
+# psql -U admin -W postgres
+postgres=# CREATE DATABASE test;
+postgres=# exit
+root@f51a0d7f439d:/# exit
+```
+
 Shutdown ``Merovingian`` containers
 
 ```console
@@ -275,7 +296,7 @@ Like the other containers it is configured on `dev_net` to isolate it from any o
 PS1> docker compose up -d postgres
 
 ## Login to container and Test `psql` interface:
-PS1> docker exec -it postgres sh
+PS1> docker exec -it postgres bash
 #
 # psql -U admin -W postgres
 Password:
